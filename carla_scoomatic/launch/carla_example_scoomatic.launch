@@ -1,0 +1,23 @@
+<!-- -->
+<launch>
+  <arg name='host' default='localhost'/>
+  <arg name='port' default='2000'/>
+  <arg name='timeout' default='10'/>
+  <arg name="vehicle_filter" default="scoomatic.*" />
+  <arg name="sensor_definition_file" default="$(find carla_scoomatic)/config/sensors.json"/>
+  <arg name="role_name" default="scoomatic"/>
+  <!-- use comma separated format "x,y,z,roll,pitch,yaw" -->
+  <arg name="spawn_point" default=""/>
+  <arg name="spawn_scoomatic" default="True" />
+
+  <include file="$(find carla_scoomatic)/launch/carla_scoomatic.launch">
+    <arg name='host' value='$(arg host)'/>
+    <arg name='port' value='$(arg port)'/>
+    <arg name='timeout' value='$(arg timeout)'/>
+    <arg name="vehicle_filter" value='$(arg vehicle_filter)'/>
+    <arg name="sensor_definition_file" value='$(arg sensor_definition_file)'/>
+    <arg name="role_name" value="$(arg role_name)"/>
+    <arg name="spawn_point" value="$(arg spawn_point)"/>
+    <arg name="spawn_scoomatic" value="$(arg spawn_scoomatic)" />
+  </include>
+</launch>
