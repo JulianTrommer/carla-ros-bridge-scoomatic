@@ -1,0 +1,18 @@
+<!-- -->
+<launch>
+  <arg name='host' default='localhost'/>
+  <arg name='port' default='2000'/>
+  <arg name="role_name" default="ego_vehicle"/>
+
+  <!-- Parameter for Odometry Publisher -->
+  <!-- publish_odom_in_ego_vehicle_frame: Wether or not to set the odom_origin Frame into the ego_vehicle initial position -->
+  <!-- publish_map_odom_tf: Wethter or not to publish the map -> odom_base_link tf -->
+  <!-- <param name='publish_odom_in_ego_vehicle_frame' type='boolean' value='False' /> -->
+  <!-- <param name='publish_map_odom_tf' type='boolean' value='True' /> -->
+  <node pkg="odom_publisher" type="odom_publisher.py" name="odom_publisher_$(arg role_name)" output="screen">
+    <param name="host" value="$(arg host)" />
+    <param name="port" value="$(arg port)" />
+    <param name="role_name" value="$(arg role_name)" />
+  </node>
+</launch>
+

@@ -1,0 +1,46 @@
+<!-- -->
+<launch>
+    <arg name='host' default='localhost'/>
+    <arg name='port' default='2000'/>
+    <arg name="role_name" default="ego_vehicle"/>
+
+    <!-- run pointcloud_to_laserscan node -->
+    <node pkg="pointcloud_to_laserscan" type="pointcloud_to_laserscan_node" name="pointcloud_to_laserscan">
+        <param name="host" value="$(arg host)" />
+        <param name="port" value="$(arg port)" />
+        <param name="role_name" value="$(arg role_name)" />
+
+        <!-- <remap from="cloud_in" to="/ego_vehicle/lidar"/> -->
+        <remap from="cloud_in" to="/carla/ego_vehicle/lidar/lidar1/point_cloud"/>
+        <remap from="scan" to="/ego_vehicle/laserscan"/>
+        <rosparam>
+            #target_frame: lidar_base_link # Leave disabled to output scan in pointcloud frame
+            transform_tolerance: 0.01
+            min_height: -2.1
+            max_height: 0.5
+            #min_height: -1
+            #max_height: 0.2
+
+            #angle_min: -1.5708 # -M_PI/2
+            #angle_max: 1.5708 # M_PI/2
+            angle_min: -3.14159
+            angle_max: 3.14159
+            angle_increment: 0.0087 # M_PI/360.0
+            #angle_increment: 0.00435
+            scan_time: 0.006
+            #range_min: 0.5
+            range_min: 0.5
+            range_max: 60.0
+            use_inf: false
+            #inf_epsilon: 1.0
+
+            # Concurrency level, affects number of pointclouds queued for processing and number of threads used
+            # 0 : Detect number of cores
+            # 1 : Single threaded
+            # 2->inf : Parallelism level
+            concurrency_level: 1
+        </rosparam>
+
+    </node>
+
+</launch>

@@ -3,7 +3,7 @@
   <arg name='host' default='localhost'/>
   <arg name='port' default='2000'/>
   <arg name='timeout' default='10'/>
-  <arg name="vehicle_filter" default="scoomatic.*" />
+  <arg name="vehicle_filter" default="vehicle.scoomatic.*" />
   <arg name="sensor_definition_file"/>
   <arg name="role_name" default="scoomatic"/>
   <!-- use comma separated format "x,y,z,roll,pitch,yaw" -->

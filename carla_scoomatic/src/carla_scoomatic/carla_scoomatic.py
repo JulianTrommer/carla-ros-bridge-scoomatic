@@ -26,7 +26,6 @@ import rospy
 from tf.transformations import euler_from_quaternion, quaternion_from_euler
 from geometry_msgs.msg import PoseWithCovarianceStamped, Pose
 from carla_msgs.msg import CarlaWorldInfo
-from scoomatic_msgs.msg import ScoomaticControl
 
 import carla
 
@@ -56,7 +55,7 @@ class CarlaScoomatic(object):
 	self.control = carla.ScoomaticControl()
         self.player_created = False
         self.sensor_actors = []
-        self.actor_filter = rospy.get_param('~vehicle_filter', 'scoomatic.*')
+        self.actor_filter = rospy.get_param('~vehicle_filter', 'vehicle.scoomatic.*')
         self.actor_spawnpoint = None
         self.role_name = rospy.get_param('~role_name', 'scoomatic')
         # check argument and set spawn_point
@@ -86,9 +85,6 @@ class CarlaScoomatic(object):
             self.on_initialpose)
         rospy.loginfo('listening to server %s:%s', self.host, self.port)
         rospy.loginfo('using vehicle filter: %s', self.actor_filter)
-
-	self.scoomatic_control_subscriber = rospy.Subscriber(
-	    "{}/scoomatic_control".format(self.role_name), ScoomaticControl, self.scoomatic_control_received)
 
     def on_initialpose(self, initial_pose):
         """
@@ -128,8 +124,7 @@ class CarlaScoomatic(object):
                 spawn_point = carla.Transform()
                 spawn_point.location.x = self.actor_spawnpoint.position.x
                 spawn_point.location.y = -self.actor_spawnpoint.position.y
-                spawn_point.location.z = self.actor_spawnpoint.position.z + \
-                    2  # spawn 2m above ground
+                spawn_point.location.z = self.actor_spawnpoint.position.z
                 quaternion = (
                     self.actor_spawnpoint.orientation.x,
                     self.actor_spawnpoint.orientation.y,
@@ -142,8 +137,8 @@ class CarlaScoomatic(object):
                                                                          spawn_point.location.x,
                                                                          spawn_point.location.y,
                                                                          spawn_point.location.z,
-                                                                         spawn_point.rotation.yaw))
-                if self.player is not None:
+                                                                         spawn_point.rotation.yaw))                
+		if self.player is not None:
                     self.player.set_transform(spawn_point)
                 while self.player is None:
                     self.player = self.world.try_spawn_actor(blueprint, spawn_point)
@@ -152,7 +147,7 @@ class CarlaScoomatic(object):
             else:
                 if self.player is not None:
                     spawn_point = self.player.get_transform()
-                    spawn_point.location.z += 2.0
+                    spawn_point.location.z += 1.0
                     spawn_point.rotation.roll = 0.0
                     spawn_point.rotation.pitch = 0.0
                     self.player.set_transform(spawn_point)
@@ -262,9 +257,6 @@ class CarlaScoomatic(object):
                         bp.set_attribute('lens_kcube', str(sensor_spec['lens_kcube']))
                         bp.set_attribute('lens_x_size', str(sensor_spec['lens_x_size']))
                         bp.set_attribute('lens_y_size', str(sensor_spec['lens_y_size']))
-                        bp.set_attribute('bloom_intensity', str(sensor_spec['bloom_intensity']))
-                        bp.set_attribute('lens_flare_intensity', str(
-                            sensor_spec['lens_flare_intensity']))
                 elif sensor_spec['type'].startswith('sensor.lidar'):
                     bp.set_attribute('range', str(sensor_spec['range']))
                     bp.set_attribute('rotation_frequency', str(sensor_spec['rotation_frequency']))
@@ -340,17 +332,6 @@ class CarlaScoomatic(object):
         """
         return []
 
-
-
-    def scoomatic_control_received(self, scoomatic_control):
-	rospy.loginfo("Received Scoomatic Control with velocities: " + str(scoomatic_control))
-	self.control.left_velocity = scoomatic_control.left_velocity
-	self.control.right_velocity = scoomatic_control.right_velocity
-	if self.player is not None:
-	    self.player.apply_control(self.control)
-	print(self.control)
-
-
     def destroy(self):
         """
         destroy the current scoomatic and its sensors
@@ -366,7 +347,6 @@ class CarlaScoomatic(object):
         self.player = None
 	
 	rospy.loginfo("Unregister topics...")
-	self.scoomatic_control_subscriber.unregister()
 
 
     def run(self):
