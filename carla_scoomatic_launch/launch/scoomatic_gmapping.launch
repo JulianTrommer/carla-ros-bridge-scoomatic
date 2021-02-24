@@ -17,7 +17,7 @@
     <arg name='role_name' value='$(arg role_name)'/>
   </include>
 
-  <arg name="scan_topic" default="base_scan_laser" />
+  <arg name="scan_topic" default="base_scan_laser"/>
 
   <node pkg="gmapping" type="slam_gmapping" name="slam_gmapping">
     <rosparam>

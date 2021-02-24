@@ -1,0 +1,43 @@
+<!-- -->
+<launch>
+  <arg name='host' default='localhost'/>
+  <arg name='port' default='2000'/>
+  <arg name='role_name' default='ego_vehicle'/>
+
+  <!-- Parameter for Odometry Publisher -->
+  <!-- publish_odom_in_ego_vehicle_frame: Wether or not to set the odom_origin Frame into the ego_vehicle initial position (Attention: odom message always represents map -> ego_vehicle tf, so this odom message is only reliable if this parameter is set to false) -->
+  <!-- publish_map_odom_tf: Wethter or not to publish the map -> odom_base_link tf -->
+  <param name='publish_odom_in_ego_vehicle_frame' type='boolean' value='False' />
+  <param name='publish_map_odom_tf' type='boolean' value='False'/>
+  <include file="$(find odom_publisher)/launch/odom_publisher.launch">
+    <arg name='role_name' value='$(arg role_name)'/>
+  </include>
+
+  <include file="$(find pc2l)/launch/pointcloud_to_laserscan.launch">
+    <arg name='role_name' value='$(arg role_name)'/>
+  </include>
+
+  <node pkg="octomap_server" type="octomap_server_node" name="octomap_server">
+		<param name="resolution" value="0.5" />
+		
+		<!-- fixed map frame (set to 'map' if SLAM or localization running!) -->
+		<param name="frame_id" type="string" value="map" />
+		<param name="base_frame_id" type="string" value="ego_vehicle/lidar/lidar1" />
+		<param name="filter_ground" type="bool" value="true" />
+		<param name="ground_filter/plane_distance" value="1.2" />
+		<param name="ground_filter/distance" value="0.2" />
+		<param name="ground_filter/angle" value="60.0" />
+
+		<param name="pointcloud_min_z" value="-1.2" />
+		<param name="pointcloud_max_z" value="0.2" />
+
+		
+		<!-- maximum range to integrate (speedup!) -->
+		<param name="sensor_model/max_range" value="7.5" />
+		
+		<!-- data source to integrate (PointCloud2) -->
+		<remap from="cloud_in" to="/carla/ego_vehicle/lidar/lidar1/point_cloud" />
+	
+	</node>
+
+</launch>

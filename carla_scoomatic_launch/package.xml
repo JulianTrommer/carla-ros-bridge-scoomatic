@@ -8,9 +8,11 @@
   <buildtool_depend>catkin</buildtool_depend>
   <build_depend>rospy</build_depend>
   <build_depend>roslaunch</build_depend>
+  <build_depend>octomap</build_depend>
   <build_export_depend>rospy</build_export_depend>
   <exec_depend>rospy</exec_depend>
   <exec_depend>topic_tools</exec_depend>
+  <exec_depend>octomap</exec_depend>
   <export>
   </export>
 </package>

@@ -16,7 +16,7 @@
         <rosparam>
             #target_frame: lidar_base_link # Leave disabled to output scan in pointcloud frame
             transform_tolerance: 0.01
-            min_height: -2.1
+            min_height: -1.0
             max_height: 0.5
             #min_height: -1
             #max_height: 0.2

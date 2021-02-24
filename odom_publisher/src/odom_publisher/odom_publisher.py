@@ -58,9 +58,7 @@ class OdometryPublisher(object):
         # position data from Localization
         self.odom_data = Odometry()
         self.odom_data_subscriber = rospy.Subscriber(
-            "{}/odom_data".format(self.role_name), Odometry, self.odom_data_updated)
-        self.odom_data_subscriber = rospy.Subscriber(
-            "/ego_vehicle/odom_data".format(self.role_name), Odometry, self.odom_data_updated)
+            "/carla/ego_vehicle/odometry".format(self.role_name), Odometry, self.odom_data_updated)
         self.tflistener = tf.TransformListener()
 
         self.laser_scan_subscriber = rospy.Subscriber(
@@ -69,7 +67,7 @@ class OdometryPublisher(object):
         #    "scan".format(self.role_name), LaserScan, self.laser_scan_updated)
 
         self.pointcloud_subscriber = rospy.Subscriber(
-            "/ego_vehicle/lidar".format(self.role_name), PointCloud2, self.pointcloud_updated)
+            "/carla/ego_vehicle/lidar/lidar1/point_cloud".format(self.role_name), PointCloud2, self.pointcloud_updated)
 
         # ==========================================
         # -- Publisher ----------------------------
@@ -141,7 +139,7 @@ class OdometryPublisher(object):
         (self.trans_odom_egovehicle, self.rot_odom_egovehicle) = self.tflistener.lookupTransform('odom_origin', 'ego_vehicle', rospy.Time(0))
         self.odom_broadcaster.sendTransform((self.trans_odom_egovehicle[0], self.trans_odom_egovehicle[1], self.trans_odom_egovehicle[2]), self.rot_odom_egovehicle, self.current_time, "base_link", "odom_base_link")
         #self.odom_broadcaster.sendTransform((self.trans_odom_egovehicle[0], self.trans_odom_egovehicle[1], self.trans_init[2]), self.rot_odom_egovehicle, self.current_time, "base_link", "odom_base_link")
-        self.odom_broadcaster.sendTransform((0.0, 0.0, 2.4), (0.0, 0.0, 0.0, 1.0), self.current_time, "lidar_base_link", "base_link")
+        self.odom_broadcaster.sendTransform((0.0, 0.0, 1.2), (0.0, 0.0, 0.0, 1.0), self.current_time, "lidar_base_link", "base_link")
 
     #def publish_odom_in_map_frame(self):
         #self.odom_broadcaster.sendTransform((0.0, 0.0, 0.0), (0.0, 0.0, 0.0, 1.0), self.current_time, "odom_base_link", "map")
