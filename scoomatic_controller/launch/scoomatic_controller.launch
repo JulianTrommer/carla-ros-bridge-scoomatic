@@ -1,0 +1,18 @@
+<launch>
+  <arg name='host' default='localhost'/>
+  <arg name='port' default='2000'/>
+  <arg name="role_name" default="ego_vehicle"/>
+
+  <node pkg="carla_ackermann_control" type="carla_ackermann_control_node.py" name="carla_ackermann_control_$(arg role_name)" output="screen">
+    <param name="role_name" value="$(arg role_name)" />
+  </node>
+
+  <node pkg="scoomatic_controller" type="scoomatic_controller.py" name="scoomatic_controller_$(arg role_name)" output="screen">
+    <param name="host" value="$(arg host)" />
+    <param name="port" value="$(arg port)" />
+    <param name="role_name" value="$(arg role_name)" />
+  </node>
+
+</launch>
+
+

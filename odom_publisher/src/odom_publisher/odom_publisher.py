@@ -23,7 +23,7 @@ from sensor_msgs.msg import LaserScan, PointCloud2
 class OdometryPublisher(object):
 
     def __init__(self):
-        self.loop_rate = rospy.Rate(100)
+        self.loop_rate = rospy.Rate(10)
         self.role_name = rospy.get_param("~role_name", 'ego_vehicle')
 
         self.x = 0.0
@@ -187,7 +187,7 @@ class OdometryPublisher(object):
         self.current_time = rospy.Time.now()
         self.last_time = rospy.Time.now()
 
-        self.r = rospy.Rate(200)
+        self.r = rospy.Rate(10)
         while not rospy.is_shutdown():
             try:
                 self.current_time = rospy.Time.now()

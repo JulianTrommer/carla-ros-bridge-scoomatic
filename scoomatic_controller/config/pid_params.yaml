@@ -1,0 +1,23 @@
+{
+'speed_Kp': 0.05,
+'speed_Ki': 0.00,
+'speed_Kd': 0.10,
+'accel_Kp': 0.50,
+'accel_Ki': 0.00,
+'accel_Kd': 1.00,
+'groups': {
+    'id': 0,
+    'parent': 0,
+    'name': 'Default',
+    'type': '',
+    'state': True,
+    'groups': {},
+    'parameters': {},
+    'speed_Kp': 0.05,
+    'speed_Ki': 0.00,
+    'speed_Kd': 0.10,
+    'accel_Kp': 0.50,
+    'accel_Ki': 0.00,
+    'accel_Kd': 1.00
+    }
+}

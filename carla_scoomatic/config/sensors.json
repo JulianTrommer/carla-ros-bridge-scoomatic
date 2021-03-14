@@ -3,7 +3,7 @@
         {
             "type": "sensor.camera.rgb",
             "id": "front",
-            "x": 0.0, "y": -0.7, "z": 0.0, "roll": 0.0, "pitch": 0.0, "yaw": 90.0,
+            "x": 0.35, "y": 0.0, "z": 0.5, "roll": 0.0, "pitch": 0.0, "yaw": 0.0,
             "width": 800,
             "height": 600,
             "fov": 100,
@@ -91,12 +91,12 @@
         {
             "type": "sensor.lidar.ray_cast",
             "id": "lidar1",
-            "x": 0.4, "y": 0.0, "z": 1.2, "roll": 0.0, "pitch": 0.0, "yaw": 0.0,
+            "x": 0.0, "y": 0.0, "z": 1.2, "roll": 0.0, "pitch": 0.0, "yaw": 0.0,
             "range": 50,
             "channels": 32,
             "points_per_second": 320000,
             "upper_fov": 2.0,
-            "lower_fov": -10.0,
+            "lower_fov": -15.0,
             "rotation_frequency": 20,
             "sensor_tick": 0.05
         },

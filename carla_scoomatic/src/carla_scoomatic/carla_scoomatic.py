@@ -147,7 +147,7 @@ class CarlaScoomatic(object):
             else:
                 if self.player is not None:
                     spawn_point = self.player.get_transform()
-                    spawn_point.location.z += 1.0
+                    #spawn_point.location.z += 1.0
                     spawn_point.rotation.roll = 0.0
                     spawn_point.rotation.pitch = 0.0
                     self.player.set_transform(spawn_point)

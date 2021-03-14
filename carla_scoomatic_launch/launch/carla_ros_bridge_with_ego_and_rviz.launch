@@ -5,11 +5,11 @@
   <arg name='role_name' default='ego_vehicle'/>
   <arg name="vehicle_filter" default='vehicle.scoomatic.*'/>
   <!-- use comma separated format "x,y,z,roll,pitch,yaw" -->
-  <arg name="spawn_point" default="-19,-29,1,0,0,90"/>
+  <arg name="spawn_point" default="-19,-29,-0.5,0,0,90"/>
   <arg name="town" default=''/>
-  <arg name='synchronous_mode' default=''/>
-  <arg name='synchronous_mode_wait_for_vehicle_control_command' default=''/>
-  <arg name='fixed_delta_seconds' default=''/>
+  <arg name='synchronous_mode' value='True'/>
+  <arg name='synchronous_mode_wait_for_vehicle_control_command' value='False'/>
+  <arg name='fixed_delta_seconds' value="0.1"/>
 
 
   <include file="$(find carla_ros_bridge)/launch/carla_ros_bridge.launch">
