@@ -58,16 +58,16 @@ class OdometryPublisher(object):
         # position data from Localization
         self.odom_data = Odometry()
         self.odom_data_subscriber = rospy.Subscriber(
-            "/carla/ego_vehicle/odometry".format(self.role_name), Odometry, self.odom_data_updated)
+            "/carla/{}/odometry".format(self.role_name), Odometry, self.odom_data_updated)
         self.tflistener = tf.TransformListener()
 
         self.laser_scan_subscriber = rospy.Subscriber(
-            "/ego_vehicle/laserscan".format(self.role_name), LaserScan, self.laser_scan_updated)
+            "/carla/{}/laserscan".format(self.role_name), LaserScan, self.laser_scan_updated)
         #self.laser_scan_subscriber = rospy.Subscriber(
         #    "scan".format(self.role_name), LaserScan, self.laser_scan_updated)
 
         self.pointcloud_subscriber = rospy.Subscriber(
-            "/carla/ego_vehicle/lidar/lidar1/point_cloud".format(self.role_name), PointCloud2, self.pointcloud_updated)
+            "/carla/{}/lidar/lidar1/point_cloud".format(self.role_name), PointCloud2, self.pointcloud_updated)
 
         # ==========================================
         # -- Publisher ----------------------------

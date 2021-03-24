@@ -31,7 +31,7 @@ class ScoomaticNavigation(object):
 	# velocity commands from move_base
 	self.cmd_vel = Twist()
 	self.cmd_vel_subscriber = rospy.Subscriber(
-	    "/cmd_vel".format(self.role_name), Twist, self.cmd_vel_updated)
+	    "/cmd_vel", Twist, self.cmd_vel_updated)
 
         # ==========================================
         # -- Publisher ----------------------------
