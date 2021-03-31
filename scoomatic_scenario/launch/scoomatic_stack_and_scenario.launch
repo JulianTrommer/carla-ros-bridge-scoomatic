@@ -1,0 +1,77 @@
+<!-- -->
+<launch>
+  <arg name='host' default='localhost'/>
+  <arg name='port' default='2000'/>
+  <arg name='role_name' default='ego_vehicle'/>
+  <arg name="vehicle_filter" default='vehicle.scoomatic.*'/>
+  <!-- use comma separated format "x,y,z,roll,pitch,yaw" -->
+  <arg name="spawn_point" default="-19,-29,-1.3,0,0,90"/>
+  <arg name="town" default=''/>
+  <arg name='synchronous_mode' value='True'/>
+  <arg name='synchronous_mode_wait_for_vehicle_control_command' value='False'/>
+  <arg name='fixed_delta_seconds' value="0.1"/>
+
+
+  <include file="$(find carla_ros_bridge)/launch/carla_ros_bridge.launch">
+    <arg name='host' value='$(arg host)'/>
+    <arg name='port' value='$(arg port)'/>
+    <arg name='town' value='$(arg town)'/>
+    <arg name='synchronous_mode' value='$(arg synchronous_mode)'/>
+    <arg name='synchronous_mode_wait_for_vehicle_control_command' value='$(arg synchronous_mode_wait_for_vehicle_control_command)'/>
+    <arg name='fixed_delta_seconds' value='$(arg fixed_delta_seconds)'/>
+  </include>
+
+  <include file="$(find carla_scoomatic)/launch/carla_example_ego_scoomatic.launch">
+    <arg name='host' value='$(arg host)'/>
+    <arg name='port' value='$(arg port)'/>
+    <arg name="vehicle_filter" value='$(arg vehicle_filter)'/>
+    <arg name='role_name' value='$(arg role_name)'/>
+    <arg name="spawn_point" value="$(arg spawn_point)"/>
+  </include>
+
+  <node pkg="rviz" type="rviz" name="rviz" args="-d $(find carla_scoomatic_launch)/config/rviz_scoomatic_config.rviz"/>
+
+  <!-- Run the map server --> 
+  <node name="map_server" pkg="map_server" type="map_server" args="$(find scoomatic_navigation)/map/gmapping_map.yaml"/>
+
+  <param name='publish_odom_in_ego_vehicle_frame' type='boolean' value='False' />
+  <param name='publish_map_odom_tf' type='boolean' value='True'/>
+  <include file="$(find odom_publisher)/launch/odom_publisher.launch">
+    <arg name='role_name' value='$(arg role_name)'/>
+  </include>
+
+  <include file="$(find pc2l)/launch/pointcloud_to_laserscan.launch">
+    <arg name='role_name' value='$(arg role_name)'/>
+  </include>
+
+
+  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+    <rosparam file="$(find scoomatic_navigation)/config/costmap_common_params.yaml" command="load" ns="global_costmap" /> 
+    <rosparam file="$(find scoomatic_navigation)/config/costmap_common_params.yaml" command="load" ns="local_costmap" />
+    <rosparam file="$(find scoomatic_navigation)/config/local_costmap_params.yaml" command="load" />
+    <rosparam file="$(find scoomatic_navigation)/config/global_costmap_params.yaml" command="load" /> 
+    <rosparam file="$(find scoomatic_navigation)/config/base_local_planner_params.yaml" command="load" />
+
+    <param name="base_local_planner" value="teb_local_planner/TebLocalPlannerROS" />
+    <param name="controller_frequency" value="2.0" />
+  </node>
+
+  <node pkg="carla_ackermann_control" type="carla_ackermann_control_node.py" name="carla_ackermann_control_$(arg role_name)" output="screen">
+    <param name="role_name" value="$(arg role_name)" />
+    <remap from="carla/ego_vehicle/vehicle_status" to="scoomatic/vehicle_status"/>
+    <remap from="carla/ego_vehicle/ackermann_cmd" to="scoomatic/ackermann_cmd"/>
+  </node>
+
+  <node pkg="scoomatic_controller" type="scoomatic_controller.py" name="scoomatic_controller_$(arg role_name)" output="screen">
+    <param name="host" value="$(arg host)" />
+    <param name="port" value="$(arg port)" />
+    <param name="role_name" value="$(arg role_name)" />
+  </node>
+
+  <node pkg="scoomatic_scenario" type="scoomatic_scenario.py" name="scoomatic_scenario_$(arg role_name)" output="screen">
+    <param name="host" value="$(arg host)" />
+    <param name="port" value="$(arg port)" />
+    <param name="role_name" value="$(arg role_name)" />
+  </node>
+
+</launch>

@@ -1,0 +1,12 @@
+<launch>
+  <arg name='host' default='localhost'/>
+  <arg name='port' default='2000'/>
+  <arg name="role_name" default="ego_vehicle"/>
+
+  <node pkg="scoomatic_scenario" type="scoomatic_scenario.py" name="scoomatic_scenario_$(arg role_name)" output="screen">
+    <param name="host" value="$(arg host)" />
+    <param name="port" value="$(arg port)" />
+    <param name="role_name" value="$(arg role_name)" />
+  </node>
+
+</launch>
