@@ -31,30 +31,8 @@
 
   <node pkg="rviz" type="rviz" name="rviz" args="-d $(find scoomatic_controller)/config/rviz_controller_config.rviz"/>
 
-  <!-- Run the map server --> 
-  <node name="map_server" pkg="map_server" type="map_server" args="$(find scoomatic_navigation)/map/gmapping_map.yaml"/>
-
-  <param name='publish_odom_in_ego_vehicle_frame' type='boolean' value='False' />
-  <param name='publish_map_odom_tf' type='boolean' value='True'/>
-  <include file="$(find odom_publisher)/launch/odom_publisher.launch">
-    <arg name='role_name' value='$(arg role_name)'/>
+  <include file="$(find scoomatic_navigation)/launch/move_base.launch">
   </include>
-
-  <include file="$(find pc2l)/launch/pointcloud_to_laserscan.launch">
-    <arg name='role_name' value='$(arg role_name)'/>
-  </include>
-
-
-  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
-    <rosparam file="$(find scoomatic_navigation)/config/costmap_common_params.yaml" command="load" ns="global_costmap" /> 
-    <rosparam file="$(find scoomatic_navigation)/config/costmap_common_params.yaml" command="load" ns="local_costmap" />
-    <rosparam file="$(find scoomatic_navigation)/config/local_costmap_params.yaml" command="load" />
-    <rosparam file="$(find scoomatic_navigation)/config/global_costmap_params.yaml" command="load" /> 
-    <rosparam file="$(find scoomatic_navigation)/config/base_local_planner_params.yaml" command="load" />
-
-    <param name="base_local_planner" value="teb_local_planner/TebLocalPlannerROS" />
-    <param name="controller_frequency" value="2.0" />
-  </node>
 
   <node pkg="carla_ackermann_control" type="carla_ackermann_control_node.py" name="carla_ackermann_control_$(arg role_name)" output="screen">
     <param name="role_name" value="$(arg role_name)" />

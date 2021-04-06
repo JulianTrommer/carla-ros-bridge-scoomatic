@@ -1,23 +1,26 @@
-# ROS Scoomatic Navigation
+# ROS Scoomatic Controller
 
-This ROS package `scoomatic_navigation` can be used to start the navigation of the scoomatic and.
+This ROS package `scoomatic_controller` is used by the navigation stack in order to forward the velocity commands to the PID-controller inside the AckermannControl node.
 
 ## Starting the node
 
-In order to use this node you need to first start the Carla Simulator in the folder where it is located:
+In order to use this node you need to start CARLA, the ros-bridge with an ego-scoomatic and the navigation base:
 ```
 ./CarlaUE4.sh
 ```
+```
+roslaunch carla_scoomatic_launch carla_ros_bridge_with_ego_and_rviz.launch
+roslaunch scoomatic_navigation move_base.launch
+```
 
-After that you can use the different launch files provided with this package:
+>Hint: You can also start the packages (that are used in the carla_scoomatic_launch package) individually.
 
-1. Custom launch files for the ros-bridge:
-   - carla_ros_bridge_with_custom_rviz.launch:  
-     - Starts the ros-bridge and rviz with a custom config file
-     - The config contains two cameras of the scoomatic (front and 3rd person) and a 3d-space in which you can see a lidar scan or the result of a mapping package.
-   - carla_ros_bridge_with_ego_scoomatic.launch:
-     - Starts the ros-bridge with a manually controllable scoomatic equipped with an example array of sensors
-2. Mapping-Packages:
-   - scoomatic_gmapping.launch:
-     - Starts the necessary packages in order to run the gmapping-algorithm.
-     - Requires the ros-bridge to be started and an ego-vehicle with a lidar sensor and odometry sensors.
+After that you can simply start the given launch file of this package.
+
+---
+
+Or you can start the full stack inside the scoomatic_scenario package:
+```
+roslaunch scoomatic_scenario scoomatic_stack_and_scenario.launch
+```
+

@@ -1,23 +1,42 @@
-# ROS Scoomatic Navigation
+# ROS Scoomatic Scenario
 
-This ROS package `scoomatic_navigation` can be used to start the navigation of the scoomatic and.
+This ROS package `scoomatic_scenario` can be used to start individual scenarios that test the ability of the scoomatic (in particular the autonomous driving).
 
 ## Starting the node
 
-In order to use this node you need to first start the Carla Simulator in the folder where it is located:
+In order to use this node you need to first start the Carla Simulator and the complete navigation stack, including the scoomatic controller:
 ```
 ./CarlaUE4.sh
 ```
+```
+roslaunch carla_scoomatic_launch carla_scoomatic_with_ego_and_rviz.launch
+roslaunch scoomatic_navigation move_base.launch
+roslaunch scoomatic_controller scoomatic_controller.launch
+```
 
-After that you can use the different launch files provided with this package:
+After that you can use the different the given launch file of this package:
+```
+roslaunch scoomatic_scenario scoomatic_scenario.launch
+```
 
-1. Custom launch files for the ros-bridge:
-   - carla_ros_bridge_with_custom_rviz.launch:  
-     - Starts the ros-bridge and rviz with a custom config file
-     - The config contains two cameras of the scoomatic (front and 3rd person) and a 3d-space in which you can see a lidar scan or the result of a mapping package.
-   - carla_ros_bridge_with_ego_scoomatic.launch:
-     - Starts the ros-bridge with a manually controllable scoomatic equipped with an example array of sensors
-2. Mapping-Packages:
-   - scoomatic_gmapping.launch:
-     - Starts the necessary packages in order to run the gmapping-algorithm.
-     - Requires the ros-bridge to be started and an ego-vehicle with a lidar sensor and odometry sensors.
+---
+
+Or you can simply start the full navigation stack with the given launch file:
+```
+roslaunch scoomatic_scenario scoomatic_stack_and_scenario.launch
+```
+
+## Using the node
+
+After you have started the node, you can execute these different scenarios:
+  1. The scoomatic and a pedestrian are facing and moving towards each other.
+  2. A pedestrian is walking into the driving direction of the scoomatic from the right.
+  3. A pedestrian is walking into the driving direction of the scoomatic from the left.
+
+The command for executing a scenario is the following:
+<pre>
+rostopic pub /scoomatic/scenario std_msgs/UInt8 <i>scenario_id</i>
+</pre>
+If you want to repeat the previous scenario, simply use 0 as the scenario_id
+
+>Warning: If you want to use the package "dynamic_obstacle_visualizer" you need to start it before executing a scenario.

@@ -17,7 +17,12 @@ After that you can use the different launch files provided with this package:
      - The config contains two cameras of the scoomatic (front and 3rd person) and a 3d-space in which you can see a lidar scan or the result of a mapping package.
    - carla_ros_bridge_with_ego_scoomatic.launch:
      - Starts the ros-bridge with a manually controllable scoomatic equipped with an example array of sensors
+   - carla_ros_bridge_with_ego_and_rviz.launch:
+     - Combines the two launch files above
 2. Mapping-Packages:
    - scoomatic_gmapping.launch:
      - Starts the necessary packages in order to run the gmapping-algorithm.
+     - Requires the ros-bridge to be started and an ego-vehicle with a lidar sensor and odometry sensors.
+   - scoomatic_octomap.launch:
+     - Starts the necessary packages in order to run the octomap-algorithm.
      - Requires the ros-bridge to be started and an ego-vehicle with a lidar sensor and odometry sensors.

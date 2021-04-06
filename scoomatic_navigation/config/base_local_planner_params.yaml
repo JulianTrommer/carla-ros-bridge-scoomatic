@@ -20,7 +20,6 @@ TebLocalPlannerROS:
  max_vel_theta: 2.0
  acc_lim_x: 0.5
  acc_lim_theta: 0.5
- costmap_converter_plugin: ""
  min_turning_radius: 3.0
  wheelbase: 0.5
  footprint_model: # types: "point", "circular", "two_circles", "line", "polygon"
@@ -49,7 +48,20 @@ TebLocalPlannerROS:
  include_costmap_obstacles: True
  costmap_obstacles_behind_robot_dist: 2.0
  obstacle_poses_affected: 30
- costmap_converter_plugin: ""
+
+ ## Costmap converter plugin   
+ costmap_converter_plugin: "costmap_converter::CostmapToPolygonsDBSMCCH"
+ costmap_converter_spin_thread: True
+ costmap_converter_rate: 5
+ 
+ 
+ ## Configure plugins (namespace move_base/TebLocalPlannerROS/PLUGINNAME)
+ ## The parameters must be added for each plugin separately
+ costmap_converter/CostmapToPolygonsDBSMCCH:
+  cluster_max_distance: 0.4
+  cluster_min_pts: 2
+  cluster_max_pts: 30
+  convex_hull_min_pt_separation: 0.1
 
  # Optimization
     
