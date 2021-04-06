@@ -43,12 +43,13 @@ TebLocalPlannerROS:
  # Obstacles
     
  min_obstacle_dist: 1.0
+ inflation_dist: 1.5
+ include_dynamic_obstacles: True
+ dynamic_obstacle_inflation_dist: 1.0
  include_costmap_obstacles: True
  costmap_obstacles_behind_robot_dist: 2.0
  obstacle_poses_affected: 30
  costmap_converter_plugin: ""
- costmap_converter_spin_thread: True
- costmap_converter_rate: 5
 
  # Optimization
     
@@ -64,8 +65,9 @@ TebLocalPlannerROS:
  weight_kinematics_nh: 1000
  weight_kinematics_forward_drive: 100
  weight_kinematics_turning_radius: 1.0
- weight_optimaltime: 1
- weight_obstacle: 50
+ weight_optimaltime: 5.0
+ weight_obstacle: 250
+ weight_shortest_path: 5.0
 
  # Homotopy Class Planner
 

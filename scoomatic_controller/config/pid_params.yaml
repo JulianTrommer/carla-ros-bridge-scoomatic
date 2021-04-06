@@ -1,7 +1,7 @@
 {
 'speed_Kp': 0.05,
 'speed_Ki': 0.00,
-'speed_Kd': 0.50,
+'speed_Kd': 0.25,
 'accel_Kp': 0.05,
 'accel_Ki': 0.00,
 'accel_Kd': 0.05,
@@ -15,7 +15,7 @@
     'parameters': {},
     'speed_Kp': 0.05,
     'speed_Ki': 0.00,
-    'speed_Kd': 0.50,
+    'speed_Kd': 0.25,
     'accel_Kp': 0.05,
     'accel_Ki': 0.00,
     'accel_Kd': 0.05

@@ -29,7 +29,7 @@
     <arg name="spawn_point" value="$(arg spawn_point)"/>
   </include>
 
-  <node pkg="rviz" type="rviz" name="rviz" args="-d $(find carla_scoomatic_launch)/config/rviz_scoomatic_config.rviz"/>
+  <node pkg="rviz" type="rviz" name="rviz" args="-d $(find scoomatic_controller)/config/rviz_controller_config.rviz"/>
 
   <!-- Run the map server --> 
   <node name="map_server" pkg="map_server" type="map_server" args="$(find scoomatic_navigation)/map/gmapping_map.yaml"/>
