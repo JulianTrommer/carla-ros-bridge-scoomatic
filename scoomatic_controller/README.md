@@ -23,4 +23,3 @@ Or you can start the full stack inside the scoomatic_scenario package:
 ```
 roslaunch scoomatic_scenario scoomatic_stack_and_scenario.launch
 ```
-

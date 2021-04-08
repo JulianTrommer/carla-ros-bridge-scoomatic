@@ -4,7 +4,7 @@
 'speed_Kd': 0.25,
 'accel_Kp': 0.05,
 'accel_Ki': 0.00,
-'accel_Kd': 0.05,
+'accel_Kd': 0.075,
 'groups': {
     'id': 0,
     'parent': 0,
@@ -18,6 +18,6 @@
     'speed_Kd': 0.25,
     'accel_Kp': 0.05,
     'accel_Ki': 0.00,
-    'accel_Kd': 0.05
+    'accel_Kd': 0.075
     }
 }

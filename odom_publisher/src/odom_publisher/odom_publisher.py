@@ -88,7 +88,6 @@ class OdometryPublisher(object):
         """
         
         self.pointcloud = pointcloud
-        #print(self.laser_scan.header.frame_id)
         self.pointcloud.header.frame_id = "lidar_base_link"
         self.pointcloud_pub.publish(self.pointcloud)
 
@@ -98,7 +97,6 @@ class OdometryPublisher(object):
         """
         
         self.laser_scan = laser_scan
-        #print(self.laser_scan.header.frame_id)
         self.laser_scan.header.frame_id = "lidar_base_link"
         self.laser_scan_pub.publish(self.laser_scan)
 

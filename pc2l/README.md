@@ -1,31 +1,21 @@
 # PointCloud to Laserscan
 
-Dieses ROS Paket realisiert die Umwandlung zwischen PointCloud- zu LaserScan-Nachrichten.
-
-# Features
-
-- [x] Umwandlung PointCloud2- zu LaserScan-Nachrichten
+This package converts the incoming PointCloud data into LaserScan messages. It simply starts the ros package (*pointcloud\_to\_laserscan*)[http://wiki.ros.org/pointcloud_to_laserscan] and changes the parameters of it.
 
 # Setup
 
-Um das Paket zu nutzen muss das Paket *pointcloud\_to\_laserscan* installiert werden:
+In order to use this package you need to install the package *pointcloud\_to\_laserscan*:
 
 ```
 sudo apt install ros-melodic-pointcloud-to-laserscan
 ```
 
-# Start des pc2l
+# Starting the node
 
-pc2l wird beim Starten des GMappings simultan gestartet.
+The odometry publisher is started by the packages that need it.
 
-Soll der pc2l separat gestartet werden, kann dies über diesen Befehl erfolgen:
+Alternatively you can start the publisher with the following command:
 
 ```
 roslaunch pc2l pointcloud_to_laserscan.launch
 ```
-
-# pc2l
-
-Das pc2l Paket basiert komplett auf dem Paket (*pointcloud\_to\_laserscan*)[http://wiki.ros.org/pointcloud_to_laserscan] und implementiert im Grunde nur ein Launch-File, das auf den benötigten Anwendungsfall angepasst werden kann.
-
-Durch Modifizieren des Launch Files kann die Node auf z.B. die Frequenz der PointCloud-Nachrichten, das Topic der Nachrichten, die maximale Höhe von Objekten, die minimale Höhe von Objekten und vieles mehr angepasst werden.

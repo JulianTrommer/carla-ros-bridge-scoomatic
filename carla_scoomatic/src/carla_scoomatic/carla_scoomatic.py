@@ -4,13 +4,8 @@
 # For a copy, see <https://opensource.org/licenses/MIT>.
 """
 base class for spawning a Scoomatic in ROS
-
-Two modes are available:
-- spawn at random Carla Spawnpoint
-- spawn at the pose read from ROS topic /initialpose
-
 Whenever a pose is received via /initialpose, the scoomatic gets respawned at that
-position. If no /initialpose is set at startup, a random spawnpoint is used.
+position.
 
 /initialpose might be published via RVIZ '2D Pose Estimate" button.
 """
@@ -100,8 +95,6 @@ class CarlaScoomatic(object):
     def restart(self):
         """
         (Re)spawns the scoomatic
-
-        Either at a given actor_spawnpoint or at a random Carla spawnpoint
 
         :return:
         """

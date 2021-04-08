@@ -1,5 +1,7 @@
 # ROS Dynamic Obstacle Visualizer
 
+>This package was derived from the teb_local_planner package from the chair RST at the TU Dortmund (Github page: https://github.com/rst-tu-dortmund/teb_local_planner)
+
 This ROS package `dynamic_obstacle_visualizer` can be used to
   - convert the obstacles of the costmap into dynamic obstacles for pose prediction.
   - visualize the estimated obstacle velocity and estimated pose.

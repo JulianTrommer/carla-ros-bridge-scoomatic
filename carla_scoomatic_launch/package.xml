@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package format="2">
   <name>carla_scoomatic_launch</name>
-  <version>0.0.0</version>
+  <version>0.1.0</version>
   <description>The carla_scoomatic_launch package</description>
   <maintainer email="julian.trommer@web.de">Julian Trommer</maintainer>
   <license>MIT</license>

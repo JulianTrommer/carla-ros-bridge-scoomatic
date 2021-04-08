@@ -37,6 +37,6 @@ The command for executing a scenario is the following:
 <pre>
 rostopic pub /scoomatic/scenario std_msgs/UInt8 <i>scenario_id</i>
 </pre>
-If you want to repeat the previous scenario, simply use 0 as the scenario_id
+If you want to repeat the previous scenario, simply use 0 as the scenario_id. However, make sure that the scoomatic is standing still, otherwise the end result will be influenced.
 
 >Warning: If you want to use the package "dynamic_obstacle_visualizer" you need to start it before executing a scenario.

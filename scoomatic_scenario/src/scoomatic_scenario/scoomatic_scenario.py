@@ -85,14 +85,14 @@ class ScoomaticScenario(object):
     def execute_scenario_one(self):
 	rospy.loginfo("Executing scenario 1...")
 	self.set_scoomatic_pose(-18.85, 49.13, -1.4, 0.00, 0.00, 0.71, 0.70)
-	self.spawn_walker(-19.25, -79.60, 1.3, 0.0, 90.0, 0.0, -0.025, 1.0, 0.0, 1.0)
-	self.walker_vel.linear.x = -0.025 * 1.0
-	self.walker_vel.linear.y = 1.0
+	self.spawn_walker(-19.25, -79.60, 1.3, 0.0, 90.0, 0.0, -0.025, 1.0, 0.0, 0.5)
+	self.walker_vel.linear.x = -0.025 * 0.5
+	self.walker_vel.linear.y = 0.5
 	self.start_scenario(-19.25, 79.60, 1.3, 0.00, 0.00, 0.71, 0.70)
 
     def execute_scenario_two(self):
 	rospy.loginfo("Executing scenario 2...")
-	self.set_scoomatic_pose(-16.78, 66.92, -1.4, 0.00, 0.00, 1.0, 0.02)
+	self.set_scoomatic_pose(-18.78, 66.92, -1.4, 0.00, 0.00, 1.0, 0.02)
 	self.spawn_walker(-28.96, -75.45, 1.3, 0.0, 90.0, 0.0, -0.025, 1.0, 0.0, 0.25)
 	self.walker_vel.linear.x = -0.025 * 0.25
 	self.walker_vel.linear.y = 0.25
@@ -159,7 +159,7 @@ class ScoomaticScenario(object):
 
     def stop_scenario(self):
 	if self.walker is not None:
-	    del walker
+	    self.walker.destroy()
 
 
     def __del__(self):

@@ -21,8 +21,10 @@ After that you can use the different launch files provided with this package:
      - Combines the two launch files above
 2. Mapping-Packages:
    - scoomatic_gmapping.launch:
+     - In order to use gmapping, you need to install its package: ```sudo apt-get install ros-melodic-gmapping```
      - Starts the necessary packages in order to run the gmapping-algorithm.
      - Requires the ros-bridge to be started and an ego-vehicle with a lidar sensor and odometry sensors.
    - scoomatic_octomap.launch:
+     - In order to use octomap, you need to install its package: ```sudo apt-get install ros-melodic-octomap```
      - Starts the necessary packages in order to run the octomap-algorithm.
      - Requires the ros-bridge to be started and an ego-vehicle with a lidar sensor and odometry sensors.

@@ -1,6 +1,8 @@
 # ROS Scoomatic
 
-The reference Carla client `carla_scoomatic` can be used to spawn a scoomatic (role-name: "scoomatic") with attached sensors.
+>This README and parts of the package were derived from the carla_ego_vehicle package of the carla-ros-bridge repository (Github page: https://github.com/carla-simulator/ros-bridge/tree/0.9.8/carla_ego_vehicle)
+
+The reference CARLA client `carla_scoomatic` can be used to spawn a scoomatic with attached sensors.
 
 If no specific position is set, the scoomatic is spawned at a random position.
 
@@ -8,9 +10,7 @@ If no specific position is set, the scoomatic is spawned at a random position.
 
 It is possible to (re)spawn the scoomatic at the specific location by publishing to `/carla/<ROLE NAME>/initialpose`.
 
-The preferred way of doing that is using RVIZ:
-
-![Autoware Runtime Manager Settings](../../ros-bridge/docs/images/rviz_set_start_goal.png)
+The preferred way of doing that is using RVIZ.
 
 Selecting a Pose with '2D Pose Estimate' will delete the current scoomatic and respawn it at the specified position.
 

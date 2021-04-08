@@ -1,9 +1,8 @@
 #!/usr/bin/env python
 
-# This small script subscribes to the FeedbackMsg message of teb_local_planner
-# and plots the current velocity.
-# publish_feedback must be turned on such that the planner publishes this information.
-# Author: christoph.roesmann@tu-dortmund.de
+# This script subscribes to the local costmap of the navigation stack and
+# the published velocity of the walker and visualizes the true velocity and
+# the estimated velocity.
 
 import rospy, math
 from teb_local_planner.msg import FeedbackMsg, TrajectoryMsg, TrajectoryPointMsg
@@ -122,5 +121,3 @@ if __name__ == '__main__':
     velocity_plotter()
   except rospy.ROSInterruptException:
     pass
-#  finally:
-#    plotter.savefig('/home/albers/Desktop/velocity_plot.pdf', bbox_inches='tight')
