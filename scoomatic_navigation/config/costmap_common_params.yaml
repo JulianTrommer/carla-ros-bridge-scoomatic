@@ -6,6 +6,6 @@ max_obstacle_height: 1.5
 
 observation_sources: base_scan_laser
 
-base_scan_laser: {sensor_frame: "lidar_base_link", data_type: LaserScan, topic: "base_scan_laser", clearing: true, marking: true}
+base_scan_laser: {sensor_frame: "lidar_base_link", data_type: LaserScan, topic: "base_scan_laser", clearing: true, marking: true, inf_is_valid: true}
 
-base_scan_lidar: {sensor_frame: "lidar_base_link", data_type: PointCloud2, topic: "base_scan_lidar", clearing: true, marking: true}
+base_scan_lidar: {sensor_frame: "lidar_base_link", data_type: PointCloud2, topic: "base_scan_lidar", clearing: true, marking: true, inf_is_valid: true}

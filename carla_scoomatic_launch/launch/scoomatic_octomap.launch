@@ -4,19 +4,6 @@
   <arg name='port' default='2000'/>
   <arg name='role_name' default='ego_vehicle'/>
 
-  <!-- Parameter for Odometry Publisher -->
-  <!-- publish_odom_in_ego_vehicle_frame: Wether or not to set the odom_origin Frame into the ego_vehicle initial position (Attention: odom message always represents map -> ego_vehicle tf, so this odom message is only reliable if this parameter is set to false) -->
-  <!-- publish_map_odom_tf: Wethter or not to publish the map -> odom_base_link tf -->
-  <param name='publish_odom_in_ego_vehicle_frame' type='boolean' value='False' />
-  <param name='publish_map_odom_tf' type='boolean' value='False'/>
-  <include file="$(find odom_publisher)/launch/odom_publisher.launch">
-    <arg name='role_name' value='$(arg role_name)'/>
-  </include>
-
-  <include file="$(find pc2l)/launch/pointcloud_to_laserscan.launch">
-    <arg name='role_name' value='$(arg role_name)'/>
-  </include>
-
   <node pkg="octomap_server" type="octomap_server_node" name="octomap_server">
 		<param name="resolution" value="0.5" />
 		

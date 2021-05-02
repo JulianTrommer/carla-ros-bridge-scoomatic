@@ -1,18 +1,17 @@
 #!/usr/bin/env python
 #
-# Copyright (c) 2019 Intel Corporation
-#
 # This work is licensed under the terms of the MIT license.
 # For a copy, see <https://opensource.org/licenses/MIT>.
 
 import time
 
-import os
 import rospy
 import carla
 
+from std_msgs.msg import Float32
+from nav_msgs.msg import Odometry
 from geometry_msgs.msg import PoseWithCovarianceStamped, PoseStamped, Twist
-from std_msgs.msg import UInt8
+from custom_msgs.msg import ScenarioParams
 
 # ==============================================================================
 # ---ScoomaticScenario----------------------------------------------------------
@@ -28,16 +27,18 @@ class ScoomaticScenario(object):
 	    rospy.get_param("~host", "localhost"), rospy.get_param("~port", "2000"))
 	self.client.set_timeout(10.0)
 	self.walker = None
-	self.previous_scenario = 0
 
         # ==========================================
         # -- Subscriber ----------------------------
         # ==========================================
 
 	# scenario message for selecting the executed scenario
-	self.scenario = UInt8()
-	self.scenario_subscriber = rospy.Subscriber(
-	    "/scoomatic/scenario", UInt8, self.execute_scenario)
+	self.scenario = ScenarioParams()
+	self.scenario_sub = rospy.Subscriber("/scoomatic/scenario", ScenarioParams, self.execute_scenario)
+
+	# odometry of the scoomatic
+	self.scoomatic_odometry = Odometry()
+	self.odometry_sub = rospy.Subscriber("/odom", Odometry, self.odometry_received)
 
         # ==========================================
         # -- Publisher ----------------------------
@@ -49,117 +50,78 @@ class ScoomaticScenario(object):
 	# goal for the scoomatic
 	self.goal_pub = rospy.Publisher("move_base_simple/goal", PoseStamped, queue_size=50)
 
-	# velocity of the walker (for dynamic obstacle visualization
+	# velocity of the walker (for dynamic obstacle visualization)
 	self.walker_vel = Twist()
 	self.walker_vel_pub = rospy.Publisher("walker_vel", Twist, queue_size=50)
 
+	# distance between the walker and the scoomatic
+	self.distance_pub = rospy.Publisher("distance_to_walker", Float32, queue_size=50)
+
+
+    def odometry_received(self, odometry):
+	self.scoomatic_odometry = odometry
 
     def execute_scenario(self, scenario):
-	if scenario.data == 0:
-	    self.execute_previous_scenario()
-	elif scenario.data == 1:
-	    self.stop_scenario()
-	    self.previous_scenario = 1
-	    self.execute_scenario_one()
-	elif scenario.data == 2:
-	    self.stop_scenario()
-	    self.previous_scenario = 2
-	    self.execute_scenario_two()
-	elif scenario.data == 3:
-	    self.stop_scenario()
-	    self.previous_scenario = 3
-	    self.execute_scenario_three()
+	self.stop_scenario()
+	rospy.loginfo("Executing scenario...")
+	self.set_scoomatic_pose(scenario.scoomatic_pose)
+	self.spawn_walker(scenario.walker_params)	
+	self.start_scenario(scenario.scoomatic_goal)
 
-    def execute_previous_scenario(self):
-	if self.previous_scenario > 0:
-	    self.stop_scenario()
-	    if self.previous_scenario == 1:
-		self.execute_scenario_one()
-	    elif self.previous_scenario == 2:
-		self.execute_scenario_two()
-	    elif self.previous_scenario == 3:
-		self.execute_scenario_three()
-	else:
-	    rospy.logwarn("There was no scenario executed previously!")
-
-    def execute_scenario_one(self):
-	rospy.loginfo("Executing scenario 1...")
-	self.set_scoomatic_pose(-18.85, 49.13, -1.4, 0.00, 0.00, 0.71, 0.70)
-	self.spawn_walker(-19.25, -79.60, 1.3, 0.0, 90.0, 0.0, -0.025, 1.0, 0.0, 0.5)
-	self.walker_vel.linear.x = -0.025 * 0.5
-	self.walker_vel.linear.y = 0.5
-	self.start_scenario(-19.25, 79.60, 1.3, 0.00, 0.00, 0.71, 0.70)
-
-    def execute_scenario_two(self):
-	rospy.loginfo("Executing scenario 2...")
-	self.set_scoomatic_pose(-18.78, 66.92, -1.4, 0.00, 0.00, 1.0, 0.02)
-	self.spawn_walker(-28.96, -75.45, 1.3, 0.0, 90.0, 0.0, -0.025, 1.0, 0.0, 0.25)
-	self.walker_vel.linear.x = -0.025 * 0.25
-	self.walker_vel.linear.y = 0.25
-	self.start_scenario(-41.13, 68.14, -1.4, 0.00, 0.00, 1.00, 0.02)
-
-    def execute_scenario_three(self):
-	rospy.loginfo("Executing scenario 3...")
-	self.set_scoomatic_pose(-16.78, 66.92, -1.4, 0.00, 0.00, 1.0, 0.02)
-	self.spawn_walker(-28.96, -55.45, 1.3, 0.0, 270.0, 0.0, 0.025, -1.0, 0.0, 0.25)
-	self.walker_vel.linear.x = 0.025 * 0.25
-	self.walker_vel.linear.y = -0.25
-	self.start_scenario(-41.13, 68.14, -1.4, 0.00, 0.00, 1.00, 0.02)
-
-
-    def set_scoomatic_pose(self, pos_x, pos_y, pos_z, orient_x, orient_y, orient_z, orient_w):
-	# set the pose of the scoomatic
+    def set_scoomatic_pose(self, scoomatic_pose):
 	pose = PoseWithCovarianceStamped()
 	pose.header.stamp = rospy.Time.now()
-	pose.pose.pose.position.x = pos_x
-	pose.pose.pose.position.y = pos_y
-	pose.pose.pose.position.z = pos_z
-	pose.pose.pose.orientation.x = orient_x
-	pose.pose.pose.orientation.y = orient_y
-	pose.pose.pose.orientation.z = orient_z
-	pose.pose.pose.orientation.w = orient_w
+	pose.pose.pose.position.x = scoomatic_pose[0]
+	pose.pose.pose.position.y = scoomatic_pose[1]
+	pose.pose.pose.position.z = scoomatic_pose[2]
+	pose.pose.pose.orientation.x = scoomatic_pose[3]
+	pose.pose.pose.orientation.y = scoomatic_pose[4]
+	pose.pose.pose.orientation.z = scoomatic_pose[5]
+	pose.pose.pose.orientation.w = scoomatic_pose[6]
 	self.initialpose_pub.publish(pose)
 
-    def spawn_walker(self, loc_x, loc_y, loc_z, pitch, yaw, roll, walk_x, walk_y, walk_z, walk_speed):
+    def spawn_walker(self, walker_params):
 	# spawn the walker
 	world = self.client.get_world()
 	walker_bp = world.get_blueprint_library().filter("walker.pedestrian.*")[0]
 	walker_bp.set_attribute('is_invincible', 'false')
 	walker_sp = carla.Transform()
-	walker_sp.location.x = loc_x
-	walker_sp.location.y = loc_y
-	walker_sp.location.z = loc_z
-	walker_sp.rotation.pitch = pitch
-	walker_sp.rotation.yaw = yaw
-	walker_sp.rotation.roll = roll
+	walker_sp.location.x = walker_params[0]
+	walker_sp.location.y = walker_params[1]
+	walker_sp.location.z = walker_params[2]
+	walker_sp.rotation.pitch = walker_params[3]
+	walker_sp.rotation.yaw = walker_params[4]
+	walker_sp.rotation.roll = walker_params[5]
 
 	self.walker = world.spawn_actor(walker_bp, walker_sp)
+	self.walker_vel.linear.x = walker_params[6] * walker_params[9]
+	self.walker_vel.linear.y = walker_params[7] * walker_params[9]
 
 	time.sleep(5)
 
 	#spawn the walker control
-	walker_control = carla.WalkerControl(carla.Vector3D(walk_x, walk_y, walk_z), walk_speed, False)
+	walker_control = carla.WalkerControl(carla.Vector3D(walker_params[6], walker_params[7], walker_params[8]), walker_params[9], False)
 	self.walker.apply_control(walker_control)
 	world.wait_for_tick()
 
-    def start_scenario(self, pos_x, pos_y, pos_z, orient_x, orient_y, orient_z, orient_w):
-	# start the scenario
+    def start_scenario(self, scoomatic_goal):
 	goal = PoseStamped()
 	goal.header.stamp = rospy.Time.now()
 	goal.header.frame_id = "map"	
-	goal.pose.position.x = pos_x
-	goal.pose.position.y = pos_y
-	goal.pose.position.z = pos_z
-	goal.pose.orientation.x = orient_x
-	goal.pose.orientation.y = orient_y
-	goal.pose.orientation.z = orient_z
-	goal.pose.orientation.w = orient_w
+	goal.pose.position.x = scoomatic_goal[0]
+	goal.pose.position.y = scoomatic_goal[1]
+	goal.pose.position.z = scoomatic_goal[2]
+	goal.pose.orientation.x = scoomatic_goal[3]
+	goal.pose.orientation.y = scoomatic_goal[4]
+	goal.pose.orientation.z = scoomatic_goal[5]
+	goal.pose.orientation.w = scoomatic_goal[6]
 	self.goal_pub.publish(goal)
 
 
     def stop_scenario(self):
 	if self.walker is not None:
-	    self.walker.destroy()
+	    if self.walker.is_alive:
+		self.walker.destroy()
 
 
     def __del__(self):
@@ -167,7 +129,7 @@ class ScoomaticScenario(object):
         Unregister all publisher and subscriber
         """
         rospy.loginfo("Unregister topics...")
-        self.scenario_subscriber.unregister()
+        self.scenario_sub.unregister()
 	self.stop_scenario()
 
 
@@ -181,6 +143,7 @@ def main():
     main function
     """
     rospy.init_node("scoomatic_scenario", anonymous=True)
+    rate = rospy.Rate(5)
 
     scoomatic_scenario = None
 
@@ -189,6 +152,13 @@ def main():
 	while not rospy.is_shutdown():
 	    if scoomatic_scenario.walker is not None:
 		scoomatic_scenario.walker_vel_pub.publish(scoomatic_scenario.walker_vel)
+		if scoomatic_scenario.walker.is_alive:
+		    scoomatic_pos = scoomatic_scenario.scoomatic_odometry.pose.pose.position
+		    # the negation of the y-value is necessary because there is a flipped sign
+		    # between the scoomatic and the walker
+		    distance = scoomatic_scenario.walker.get_location().distance(carla.Location(scoomatic_pos.x, -scoomatic_pos.y, scoomatic_pos.z))
+		    scoomatic_scenario.distance_pub.publish(distance)
+	    rate.sleep()
     finally:
         if scoomatic_scenario is not None:
             del scoomatic_scenario

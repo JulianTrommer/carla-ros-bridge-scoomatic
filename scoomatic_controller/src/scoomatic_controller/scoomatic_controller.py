@@ -1,16 +1,13 @@
 #!/usr/bin/env python
 #
-# Copyright (c) 2019 Intel Corporation
-#
 # This work is licensed under the terms of the MIT license.
 # For a copy, see <https://opensource.org/licenses/MIT>.
 
 import os
 import rospy
-import tf
 import math
 
-from geometry_msgs.msg import Twist, Vector3
+from geometry_msgs.msg import Twist
 from ackermann_msgs.msg import AckermannDrive
 from carla_msgs.msg import CarlaEgoVehicleStatus
 # ==============================================================================

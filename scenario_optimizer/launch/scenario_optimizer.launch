@@ -1,0 +1,12 @@
+<launch>
+  <arg name='host' default='localhost'/>
+  <arg name='port' default='2000'/>
+  <arg name="role_name" default="ego_vehicle"/>
+
+  <node pkg="scenario_optimizer" type="scenario_optimizer.py" name="scenario_optimizer_$(arg role_name)" output="screen">
+    <param name="host" value="$(arg host)" />
+    <param name="port" value="$(arg port)" />
+    <param name="role_name" value="$(arg role_name)" />
+  </node>
+
+</launch>

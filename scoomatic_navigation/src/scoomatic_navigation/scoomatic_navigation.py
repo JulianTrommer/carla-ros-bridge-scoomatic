@@ -1,16 +1,11 @@
 #!/usr/bin/env python
 #
-# Copyright (c) 2019 Intel Corporation
-#
 # This work is licensed under the terms of the MIT license.
 # For a copy, see <https://opensource.org/licenses/MIT>.
 
-import os
 import rospy
-import tf
 
 from geometry_msgs.msg import Twist
-from ackermann_msgs.msg import AckermannDrive
 
 
 # ==============================================================================

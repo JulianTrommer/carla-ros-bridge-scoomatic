@@ -4,10 +4,10 @@
 # the published velocity of the walker and visualizes the true velocity and
 # the estimated velocity.
 
-import rospy, math
+import rospy
 from teb_local_planner.msg import FeedbackMsg, TrajectoryMsg, TrajectoryPointMsg
 from costmap_converter.msg import ObstacleArrayMsg
-from geometry_msgs.msg import PolygonStamped, Point32, Twist
+from geometry_msgs.msg import Twist
 import numpy as np
 import matplotlib.pyplot as plotter
 

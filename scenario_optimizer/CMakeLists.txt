@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(scoomatic_scenario)
+project(scenario_optimizer)
 
-find_package(catkin REQUIRED COMPONENTS message_generation rospy roslaunch std_msgs nav_msgs custom_msgs)
+find_package(catkin REQUIRED COMPONENTS rospy roslaunch custom_msgs actionlib_msgs carla_msgs std_srvs)
 
 roslaunch_add_file_check(launch IGNORE_UNSET_ARGS)
 
