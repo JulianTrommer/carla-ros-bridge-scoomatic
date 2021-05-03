@@ -1,27 +1,24 @@
 # ROS Scenario Optimizer
 
-## Example Scenarios
+This ROS package `scenario optimizer` can be used to simulate a scenario with different parameters to optimize the cost function (distance between Scoomatic and Walker).
 
-### Scenario 1
+## Starting the node
 
+In order to use this node you need to first start the Carla Simulator and the complete navigation stack, including the scoomatic controller:
 ```
-scoomatic_pose = [-18.85, 49.13, -1.4, 0.00, 0.00, 0.71, 0.70]
-walker_params = [-19.25, -79.60, 1.3, 0.0, 90.0, 0.0, -0.025, 1.0, 0.0, 0.5]
-scoomatic_goal = [-19.25, 79.60, 1.3, 0.00, 0.00, 0.71, 0.70]
+./CarlaUE4.sh
 ```
-
-### Scenario 2
-
 ```
-scoomatic_pose = [-18.78, 66.92, -1.4, 0.00, 0.00, 1.0, 0.02]
-walker_params = [-28.96, -75.45, 1.3, 0.0, 90.0, 0.0, -0.025, 1.0, 0.0, 0.25]
-scoomatic_goal = [-41.13, 68.14, -1.4, 0.00, 0.00, 1.00, 0.02]
+roslaunch scoomatic_scenario scoomatic_stack_and_scenario.launch
 ```
 
-### Scenario 3
+After that you can use the given launch file of this package:
+```
+roslaunch scenario_optimizer scenario_optimizer.launch
+```
 
-```
-scoomatic_pose = [-16.78, 66.92, -1.4, 0.00, 0.00, 1.0, 0.02]
-walker_params = [-28.96, -55.45, 1.3, 0.0, 270.0, 0.0, 0.025, -1.0, 0.0, 0.25]
-scoomatic_goal = [-41.13, 68.14, -1.4, 0.00, 0.00, 1.00, 0.02]
-```
+---
+
+## Using the node
+
+After launching the node it will execute the optimization of a given scenario with the parameters specified in the code. The optimized parameters in this case are the walking direction of the walker and the cost function is the negative distance between the vehicle and the walker.
