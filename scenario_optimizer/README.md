@@ -1,6 +1,7 @@
 # ROS Scenario Optimizer
 
-This ROS package `scenario optimizer` can be used to simulate a scenario with different parameters to optimize the cost function (distance between Scoomatic and Walker).
+This ROS package `scenario optimizer` can be used to simulate a scenario with different parameters to optimize the cost function (distance between Scoomatic and Walker).\
+The bayesian optimization used in this packaged is based on the implementation of [Fernando Noguiera](https://github.com/fmfn/BayesianOptimization) and is converted to be executable with Python 2.
 
 ## Starting the node
 
